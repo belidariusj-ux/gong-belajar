@@ -102,7 +102,35 @@ textarea{
 </head>
 
 <body>
+<div id="loginGuru" class="halaman aktif">
 
+<div class="soal">
+
+<h2>🔐 LOGIN GURU</h2>
+
+<input
+type="email"
+id="emailGuru"
+placeholder="Email Guru">
+
+<br><br>
+
+<input
+type="password"
+id="passwordGuru"
+placeholder="Password">
+
+<br><br>
+
+<button onclick="loginGuru()">
+🔑 Masuk
+</button>
+
+<p id="pesanLogin"></p>
+
+</div>
+
+</div>
 <header>
 <h1>🎓 GONG BELAJAR</h1>
 <p>UPTD SMPN 3 Amabi Oefeto • TP 2026/2027</p>
@@ -111,8 +139,7 @@ textarea{
 <div class="container">
 
 <!-- MENU UTAMA -->
-<div id="menu" class="halaman aktif">
-
+<div id="menu" class="halaman">
 <h2 style="text-align:center">🏠 MENU UTAMA</h2>
 
 <div class="menu">
@@ -564,8 +591,33 @@ canvas.addEventListener("mouseleave",selesai);
 canvas.addEventListener("touchstart",mulai);
 canvas.addEventListener("touchmove",go);
 canvas.addEventListener("touchend",selesai);
+async function loginGuru(){
 
+    const email = document.getElementById("emailGuru").value;
+    const password = document.getElementById("passwordGuru").value;
+    const pesan = document.getElementById("pesanLogin");
+
+    if(!email || !password){
+        pesan.innerText = "Email dan password wajib diisi.";
+        return;
+    }
+
+    const { error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if(error){
+        pesan.innerText = "Login gagal: " + error.message;
+        return;
+    }
+
+    pesan.innerText = "Login berhasil!";
+    buka("menu");
+}
 </script>
 
 </body>
+
 </html>
+<script>
