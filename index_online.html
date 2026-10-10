@@ -122,11 +122,41 @@ placeholder="Password">
 
 <br><br>
 
-<button onclick="loginGuru()">
-🔑 Masuk
+<button type="button" onclick="loginGuru()">
+  🔑 Masuk
 </button>
 
+<button type="button" onclick="lupaPassword()">
+  Lupa Password?
+</button>
+
+
+
 <p id="pesanLogin"></p>
+
+<div id="formPasswordBaru" style="display:none; margin-top:20px;">
+  <h3>Buat Password Baru</h3>
+
+  <input
+    type="password"
+    id="passwordBaru"
+    placeholder="Masukkan password baru">
+
+  <br><br>
+
+  <input
+    type="password"
+    id="konfirmasiPasswordBaru"
+    placeholder="Ulangi password baru">
+
+  <br><br>
+
+  <button type="button" onclick="simpanPasswordBaru()">
+    Simpan Password Baru
+  </button>
+
+  <p id="pesanPasswordBaru"></p>
+</div>
 
 </div>
 
@@ -591,13 +621,12 @@ canvas.addEventListener("mouseleave",selesai);
 canvas.addEventListener("touchstart",mulai);
 canvas.addEventListener("touchmove",go);
 canvas.addEventListener("touchend",selesai);
-async function loginGuru(){
-
-    const email = document.getElementById("emailGuru").value;
+async function loginGuru() {
+    const email = document.getElementById("emailGuru").value.trim();
     const password = document.getElementById("passwordGuru").value;
     const pesan = document.getElementById("pesanLogin");
 
-    if(!email || !password){
+    if (!email || !password) {
         pesan.innerText = "Email dan password wajib diisi.";
         return;
     }
@@ -607,7 +636,7 @@ async function loginGuru(){
         password: password
     });
 
-    if(error){
+    if (error) {
         pesan.innerText = "Login gagal: " + error.message;
         return;
     }
@@ -615,9 +644,65 @@ async function loginGuru(){
     pesan.innerText = "Login berhasil!";
     buka("menu");
 }
+
+async function lupaPassword() {
+    const email = document.getElementById("emailGuru").value.trim();
+    const pesan = document.getElementById("pesanLogin");
+
+    if (!email) {
+        pesan.innerText = "Masukkan email guru terlebih dahulu.";
+        return;
+    }
+
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: "https://belidariusj-ux.github.io/gong-belajar/index_online.html"
+    });
+
+    if (error) {
+        pesan.innerText = "Gagal mengirim email: " + error.message;
+        return;
+    }
+
+    pesan.innerText = "Email pemulihan dikirim. Periksa Kotak Masuk atau Spam.";
+}
+supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === "PASSWORD_RECOVERY" && session) {
+        document.getElementById("formPasswordBaru").style.display = "block";
+        document.getElementById("pesanLogin").innerText =
+            "Silakan buat password baru.";
+    }
+});
+async function simpanPasswordBaru() {
+    const password = document.getElementById("passwordBaru").value;
+    const konfirmasi = document.getElementById("konfirmasiPasswordBaru").value;
+    const pesan = document.getElementById("pesanPasswordBaru");
+
+    if (!password || !konfirmasi) {
+        pesan.innerText = "Kedua kolom password wajib diisi.";
+        return;
+    }
+
+    if (password.length < 6) {
+        pesan.innerText = "Password minimal 6 karakter.";
+        return;
+    }
+
+    if (password !== konfirmasi) {
+        pesan.innerText = "Kedua password belum sama.";
+        return;
+    }
+
+    const { error } = await supabaseClient.auth.updateUser({
+        password: password
+    });
+
+    if (error) {
+        pesan.innerText = "Gagal menyimpan password: " + error.message;
+        return;
+    }
+
+    pesan.innerText = "Password berhasil diubah. Silakan login kembali.";
+}
 </script>
-
 </body>
-
-</html>
-<script>
+</html
