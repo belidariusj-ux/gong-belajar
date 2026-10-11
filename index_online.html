@@ -398,58 +398,79 @@ aturCanvas();
 
 
 let soal = JSON.parse(localStorage.getItem("gongSoal")) || [];
+let indeksEdit = -1;
 
+function simpanSoal() {
+    const jenis = document.getElementById("jenis").value;
+    const pertanyaan = document.getElementById("pertanyaan").value.trim();
+    const pilihanA = document.getElementById("pilihanA").value.trim();
+    const pilihanB = document.getElementById("pilihanB").value.trim();
+    const pilihanC = document.getElementById("pilihanC").value.trim();
+    const pilihanD = document.getElementById("pilihanD").value.trim();
+    const kunci = document.getElementById("kunci").value;
 
-function simpanSoal(){
+    if (!pertanyaan) {
+        alert("Pertanyaan belum diisi.");
+        return;
+    }
 
-let jenis=document.getElementById("jenis").value;
-let pertanyaan=document.getElementById("pertanyaan").value.trim();
-let kunci=document.getElementById("kunci").value.trim();
+    if (!pilihanA || !pilihanB || !pilihanC || !pilihanD) {
+        alert("Pilihan A, B, C, dan D wajib diisi.");
+        return;
+    }
 
-if(pertanyaan==""){
-alert("Pertanyaan belum diisi.");
-return;
-}
+    if (!kunci) {
+        alert("Silakan pilih kunci jawaban.");
+        return;
+    }
 
-let data={
-jenis:jenis,
-pertanyaan:pertanyaan,
-kunci:kunci
-};
+    const data = {
+        jenis: jenis,
+        pertanyaan: pertanyaan,
+        pilihanA: pilihanA,
+        pilihanB: pilihanB,
+        pilihanC: pilihanC,
+        pilihanD: pilihanD,
+        kunci: kunci
+    };
 
-soal.push(data);
+    if (typeof indeksEdit !== "undefined" && indeksEdit !== -1) {
+        soal[indeksEdit] = data;
+        indeksEdit = -1;
+    } else {
+        soal.push(data);
+    }
 
-localStorage.setItem("gongSoal",JSON.stringify(soal));
+    localStorage.setItem("gongSoal", JSON.stringify(soal));
 
-document.getElementById("pertanyaan").value="";
-document.getElementById("kunci").value="";
+    document.getElementById("pertanyaan").value = "";
+    document.getElementById("pilihanA").value = "";
+    document.getElementById("pilihanB").value = "";
+    document.getElementById("pilihanC").value = "";
+    document.getElementById("pilihanD").value = "";
+    document.getElementById("kunci").value = "";
 
-tampilkanSoal();
+  function tampilkanSoal() {
+    let area = document.getElementById("daftarSoal");
 
-alert("Soal berhasil disimpan.");
+    if (!area) return;
 
-}
-function tampilkanSoal(){
+    area.innerHTML = "";
 
-let area=document.getElementById("daftarSoal");
-
-if(!area)return;
-
-area.innerHTML="";
-
-soal.forEach(function(s,i){
-
-area.innerHTML +=
-'<div class="soal">'+
-'<b>'+(i+1)+'. '+s.jenis.toUpperCase()+'</b>'+
-'<p>'+s.pertanyaan+'</p>'+
-'<small>Kunci: '+s.kunci+'</small><br>'+
-'<button onclick="editSoal('+i+')">✏️ Edit</button>'+
-'<button onclick="hapusSoal('+i+')">🗑️ Hapus</button>'+
-'</div>';
-
-});
-
+    soal.forEach(function(s, i) {
+        area.innerHTML +=
+            '<div class="soal">' +
+            '<b>' + (i + 1) + '. ' + s.jenis.toUpperCase() + '</b>' +
+            '<p>' + s.pertanyaan + '</p>' +
+            '<p>A. ' + (s.pilihanA || '-') + '</p>' +
+            '<p>B. ' + (s.pilihanB || '-') + '</p>' +
+            '<p>C. ' + (s.pilihanC || '-') + '</p>' +
+            '<p>D. ' + (s.pilihanD || '-') + '</p>' +
+            '<small>Kunci: ' + s.kunci + '</small><br>' +
+            '<button onclick="editSoal(' + i + ')">✏️ Edit</button> ' +
+            '<button onclick="hapusSoal(' + i + ')">🗑️ Hapus</button>' +
+            '</div>';
+    });
 }
 
 
@@ -466,7 +487,29 @@ tampilkanSoal();
 
 }
 
+function editSoal(index) {
+    const s = soal[index];
 
+    if (!s) {
+        alert("Soal tidak ditemukan.");
+        return;
+    }
+
+    indeksEdit = index;
+
+    document.getElementById("jenis").value = s.jenis;
+    document.getElementById("pertanyaan").value = s.pertanyaan;
+    document.getElementById("pilihanA").value = s.pilihanA || "";
+    document.getElementById("pilihanB").value = s.pilihanB || "";
+    document.getElementById("pilihanC").value = s.pilihanC || "";
+    document.getElementById("pilihanD").value = s.pilihanD || "";
+    document.getElementById("kunci").value = s.kunci || "";
+
+    buka("bank");
+    document.getElementById("pertanyaan").focus();
+
+    alert("Silakan ubah soal, lalu klik Simpan Soal.");
+}
 function tampilkanKuis(){
 let area=document.getElementById("kuisSoal");
 
