@@ -319,8 +319,25 @@ function hapusSoal(id){
  soal=soal.filter(s=>s.id!==id);simpanSemua();
 }
 function tampilkanDiPapan(id){
- const s=soal.find(x=>x.id===id);if(!s)return;
- document.getElementById("soalPapan").innerHTML="<h3>"+aman(s.kategori)+"</h3><p>"+aman(s.pertanyaan)+"</p>";
+ const s = soal.find(x => String(x.id) === String(id));
+
+ if(!s){
+  alert("Soal tidak ditemukan di Bank Soal.");
+  return;
+ }
+
+ const tempatSoal = document.getElementById("soalPapan");
+
+ if(!tempatSoal){
+  alert("Bagian tampilan soal tidak ditemukan.");
+  return;
+ }
+
+ tempatSoal.innerHTML =
+  "<h3>" + aman(s.kategori) + "</h3>" +
+  "<p style='font-size:22px;line-height:1.6;white-space:pre-wrap'>" +
+  aman(s.pertanyaan) + "</p>";
+
  buka("papanPage");
 }
 function simpanBacaan(){
