@@ -266,6 +266,7 @@ function pilihKategori(k){
 function kosongkanForm(){
  ["editId","pertanyaan","opsiA","opsiB","opsiC","opsiD","kunci"].forEach(id=>document.getElementById(id).value="");
  document.getElementById("kategori").value="Literasi";
+ aturPilihanSoal();
 }
 function simpanSoal(){
  const pertanyaan=document.getElementById("pertanyaan").value.trim();
