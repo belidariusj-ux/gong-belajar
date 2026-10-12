@@ -180,25 +180,33 @@ footer{text-align:center;padding:22px;color:#64748b;font-size:13px}
 <section id="papanPage" class="page">
 <div class="card">
 <h2>✍️ Papan Interaktif</h2>
-<p>Siswa dapat menulis, menggambar, membuat hitungan, atau menjelaskan jawaban langsung pada papan.</p>
+<p>Siswa menjawab soal dengan menulis langsung pada papan.</p>
+
+<div style="border:3px solid #b7c8dc;border-radius:10px;background:white;overflow:hidden">
+  <div style="background:#e6efff;padding:15px;border-bottom:2px solid #b7c8dc">
+    <h3 style="margin:0 0 8px">SOAL UNTUK SISWA</h3>
+    <div id="soalPapan">Pilih soal dari Bank Soal untuk ditampilkan di sini.</div>
+  </div>
+  <canvas id="papan" style="border:0;border-radius:0"></canvas>
+</div>
+
 <div class="actions">
-<label style="display:flex;align-items:center;gap:8px">Warna
-<input id="warnaPena" type="color" value="#163d79" style="width:55px;margin:0;padding:2px"></label>
-<label style="display:flex;align-items:center;gap:8px">Ukuran pena
-<input id="ukuranPena" type="range" min="2" max="18" value="4" style="width:100px;margin:0"></label>
-<button class="orange" onclick="modePenghapus()">🧽 Penghapus</button>
-<button onclick="modePena()">✏️ Pena</button>
-<button class="red" onclick="hapusPapan()">Bersihkan Papan</button>
-<button class="green" onclick="simpanPapan()">💾 Simpan Gambar</button>
+  <label style="display:flex;align-items:center;gap:8px">Warna
+    <input id="warnaPena" type="color" value="#163d79" style="width:55px;margin:0;padding:2px">
+  </label>
+  <label style="display:flex;align-items:center;gap:8px">Ukuran pena
+    <input id="ukuranPena" type="range" min="2" max="18" value="4" style="width:100px;margin:0">
+  </label>
+  <button class="orange" onclick="modePenghapus()">🧽 Penghapus</button>
+  <button onclick="modePena()">✏️ Pena</button>
+  <button class="red" onclick="hapusPapan()">Bersihkan Papan</button>
+  <button class="green" onclick="simpanPapan()">💾 Simpan Gambar</button>
+  <button onclick="buka('bank')">📝 Pilih Soal</button>
 </div>
-<canvas id="papan"></canvas>
-<p class="muted">Jika sentuhan tidak berfungsi, pastikan layar interaktif terhubung dengan kabel USB sentuh selain HDMI. Mouse dapat digunakan sebagai alternatif.</p>
+
+<p class="muted">Literasi dijawab dengan esai. Numerasi dijawab dengan angka dan langkah perhitungan. Siswa dapat menulis menggunakan mouse atau layar sentuh yang mendukung sentuhan.</p>
 </div>
-<div class="card">
-<h3>Soal yang sedang dibahas</h3>
-<div id="soalPapan">Pilih soal dari Bank Soal atau tampilkan soal dari Mode Kuis.</div>
-<button onclick="buka('bank')">Pilih dari Bank Soal</button>
-</div>
+
 </section>
 
 <section id="login" class="page">
