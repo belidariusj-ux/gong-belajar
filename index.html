@@ -333,11 +333,16 @@ function tampilkanDiPapan(id){
   return;
  }
 
- tempatSoal.innerHTML =
+ const petunjuk = s.kategori === "Literasi"
+  ? "✍️ JAWABAN ESAI: Tuliskan jawaban dengan kalimat sendiri."
+  : "🔢 JAWABAN NUMERASI: Tuliskan jawaban beserta langkah-langkah perhitungan.";
+
+tempatSoal.innerHTML =
   "<h3>" + aman(s.kategori) + "</h3>" +
   "<p style='font-size:22px;line-height:1.6;white-space:pre-wrap'>" +
-  aman(s.pertanyaan) + "</p>";
-
+  aman(s.pertanyaan) + "</p>" +
+  "<p style='font-size:18px;font-weight:bold;color:#164e9b;background:#fff7cc;padding:12px;border-radius:8px'>" +
+  petunjuk + "</p>";
  buka("papanPage");
 }
 function simpanBacaan(){
