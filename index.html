@@ -245,7 +245,10 @@ function buka(id,tombol){
  if(halaman)halaman.classList.add("active");
  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
  if(tombol)tombol.classList.add("active");
- if(id==="bank")tampilkanSoal();
+if(id==="bank"){
+ tampilkanSoal();
+ aturPilihanSoal();
+}
  if(id==="dashboard")perbaruiJumlah();
  if(id==="papanPage")setTimeout(aturPapan,50);
 }
