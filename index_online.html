@@ -1,751 +1,443 @@
 <!DOCTYPE html>
 <html lang="id">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL = "https://bhoocdndizlwrxahnqsj.supabase.co";
-const SUPABASE_KEY = "sb_publishable_HMZl6lp9PllRvMmd2YTZoQ_vL5DwWrM";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-</script>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gong Belajar - Tahap 3B</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gong Belajar - SMPN 3 Amabi Oefeto</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#eef3f8;
-    color:#17324d;
-}
-header{
-    background:#1769aa;
-    color:white;
-    text-align:center;
-    padding:20px;
-}
-header h1{margin:0 0 8px}
-header p{margin:0}
-
-.container{
-    max-width:1000px;
-    margin:25px auto;
-    padding:15px;
-}
-
-.halaman{
-    display:none;
-    background:white;
-    border-radius:18px;
-    padding:25px;
-    box-shadow:0 5px 15px rgba(0,0,0,.12);
-}
-.halaman.aktif{display:block}
-
-.menu{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px;
-}
-
-.card{
-    background:white;
-    border-radius:18px;
-    padding:25px 15px;
-    text-align:center;
-    box-shadow:0 5px 15px rgba(0,0,0,.12);
-    cursor:pointer;
-}
-
-.icon{font-size:48px}
-
-button{
-    border:0;
-    border-radius:10px;
-    padding:12px 18px;
-    font-size:16px;
-    background:#1769aa;
-    color:white;
-    cursor:pointer;
-    margin:5px;
-}
-
-input,select,textarea{
-    width:100%;
-    box-sizing:border-box;
-    padding:12px;
-    margin:7px 0 15px;
-    border:1px solid #bbb;
-    border-radius:8px;
-    font-size:16px;
-}
-
-textarea{
-    min-height:120px;
-}
-
-.soal{
-    background:#f4f7fa;
-    border-radius:12px;
-    padding:15px;
-    margin:10px 0;
-}
-
-@media(max-width:700px){
-    .menu{grid-template-columns:1fr}
-}
+:root{--biru:#174ea6;--bg:#f3f6fb;--putih:#fff;--hijau:#16804a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#202938}
+header{background:var(--biru);color:white;padding:20px;text-align:center}
+main{max-width:1000px;margin:auto;padding:18px}
+.panel{background:white;border-radius:14px;padding:20px;margin:14px 0;box-shadow:0 2px 8px #0000000c}
+input,select,textarea{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #bdc8d8;border-radius:8px;font:inherit}
+button{border:0;border-radius:9px;background:var(--biru);color:white;padding:12px 16px;margin:4px;cursor:pointer;font-size:15px}
+button.secondary{background:#526174}
+button.danger{background:#b42318}
+button.good{background:var(--hijau)}
+.menu{display:flex;flex-wrap:wrap;gap:6px}
+.hidden{display:none!important}
+.notice{padding:12px;background:#edf4ff;border-radius:8px;margin:10px 0;white-space:pre-wrap}
+.item{border:1px solid #dbe2ec;border-radius:10px;padding:14px;margin:10px 0}
+canvas{width:100%;height:220px;border:2px dashed #8b9bb0;border-radius:10px;background:white;touch-action:none}
+h2{margin-top:0}
+.small{font-size:13px;color:#5b6472}
 </style>
 </head>
-
 <body>
-<div id="loginGuru" class="halaman aktif">
-
-<div class="soal">
-
-<h2>🔐 LOGIN GURU</h2>
-
-<input
-type="email"
-id="emailGuru"
-placeholder="Email Guru">
-
-<br><br>
-
-<input
-type="password"
-id="passwordGuru"
-placeholder="Password">
-
-<br><br>
-
-<button type="button" onclick="loginGuru()">
-  🔑 Masuk
-</button>
-
-<button type="button" onclick="lupaPassword()">
-  Lupa Password?
-</button>
-
-
-
-<p id="pesanLogin"></p>
-
-<div id="formPasswordBaru" style="display:none; margin-top:20px;">
-  <h3>Buat Password Baru</h3>
-
-  <input
-    type="password"
-    id="passwordBaru"
-    placeholder="Masukkan password baru">
-
-  <br><br>
-
-  <input
-    type="password"
-    id="konfirmasiPasswordBaru"
-    placeholder="Ulangi password baru">
-
-  <br><br>
-
-  <button type="button" onclick="simpanPasswordBaru()">
-    Simpan Password Baru
-  </button>
-
-  <p id="pesanPasswordBaru"></p>
-</div>
-
-</div>
-
-</div>
 <header>
-<h1>🎓 GONG BELAJAR</h1>
-<p>UPTD SMPN 3 Amabi Oefeto • TP 2026/2027</p>
+<h1>GONG BELAJAR</h1>
+<div>UPTD SMPN 3 Amabi Oefeto · TP 2026/2027</div>
 </header>
 
-<div class="container">
+<main>
+<section id="login" class="panel">
+<h2>Login Guru</h2>
+<p>Guru masuk menggunakan akun yang sudah terdaftar di Supabase.</p>
+<label>Email guru</label>
+<input id="email" type="email" autocomplete="username" placeholder="Email guru">
+<label>Kata sandi</label>
+<input id="password" type="password" autocomplete="current-password" placeholder="Kata sandi">
+<button onclick="loginGuru()">Masuk</button>
+<div id="loginMsg" class="notice" role="status"></div>
+</section>
 
-<!-- MENU UTAMA -->
-<div id="menu" class="halaman">
-<h2 style="text-align:center">🏠 MENU UTAMA</h2>
-
+<section id="app" class="hidden">
+<div class="panel">
+<div id="userInfo"></div>
 <div class="menu">
-
-<div class="card" onclick="buka('literasi')">
-<div class="icon">📚</div>
-<h2>LITERASI</h2>
-<p>Membaca dan memahami teks.</p>
-</div>
-
-<div class="card" onclick="buka('numerasi')">
-<div class="icon">🔢</div>
-<h2>NUMERASI</h2>
-<p>Berhitung dan memecahkan masalah.</p>
-</div>
-
-<div class="card" onclick="buka('bank')">
-<div class="icon">📝</div>
-<h2>BANK SOAL</h2>
-<p>Guru membuat dan menyimpan soal.</p>
-</div>
-
-<div class="card" onclick="buka('kuis')">
-<div class="icon">🎯</div>
-<h2>MODE KUIS</h2>
-<p>Latihan dan evaluasi.</p>
-</div>
-
-<div class="card" onclick="buka('game')">
-<div class="icon">🎮</div>
-<h2>MODE GAME</h2>
-<p>Belajar sambil bermain.</p>
-</div>
-
-<div class="card" onclick="buka('papan')">
-<div class="icon">✍️</div>
-<h2>PAPAN INTERAKTIF</h2>
-<p>Siswa menjawab langsung.</p>
-</div>
-
+<button onclick="showPage('bank')">Bank Soal</button>
+<button onclick="showPage('kuis')">Mode Kuis</button>
+<button onclick="showPage('game')">Mode Game</button>
+<button class="secondary" onclick="logoutGuru()">Keluar Guru</button>
 </div>
 </div>
 
-
-<!-- LITERASI -->
-<div id="literasi" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<div class="soal">
-<h2>📚 LITERASI</h2>
-
-<h3>📖 Bacaan</h3>
-
-<textarea
-id="bacaanLiterasi"
-rows="8"
-placeholder="Guru menuliskan bacaan di sini..."></textarea>
-<h3>✍️ Jawaban Siswa</h3>
-
-<textarea
-id="jawabanLiterasi"
-rows="5"
-placeholder="Siswa menuliskan jawaban di sini..."></textarea>
-
-<button onclick="alert('Jawaban literasi diterima!')">
-✅ Kirim Jawaban
-</button>
-
-</div>
-</div>
-
-<!-- NUMERASI -->
-<div id="numerasi" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<h2>🔢 NUMERASI</h2>
-
-<p>
-Numerasi digunakan untuk memahami angka,
-operasi hitung dan memecahkan masalah kehidupan sehari-hari.
-</p>
-
-<div class="soal">
-
-<p>
-Contoh:
-
-Jika 3 × 8 = ..., berapakah hasilnya?
-</p>
-
-<input type="text" id="jawabanNumerasi"
-placeholder="Tuliskan jawaban">
-
-<button onclick="cekNumerasi()">
-✅ Periksa Jawaban
-</button>
-
-<p id="hasilNumerasi"></p>
-
-</div>
-
-</div>
-
-
-<!-- BANK SOAL -->
-<div id="bank" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<h2>📝 BANK SOAL GURU</h2>
-
-<label>Jenis Soal</label>
-
+<section id="bank" class="panel">
+<h2>Bank Soal Literasi dan Numerasi</h2>
+<p class="small">Buat pertanyaan esai. Untuk penilaian otomatis, masukkan kunci jawaban singkat yang jelas, misalnya angka atau satu kata.</p>
+<label>Mata pelajaran / bidang</label>
+<input id="mapel" placeholder="Contoh: Literasi atau Numerasi">
+<label>Jenis soal</label>
 <select id="jenis">
-<option value="literasi">📚 Literasi</option>
-<option value="numerasi">🔢 Numerasi</option>
+<option value="esai">Esai</option>
+<option value="kuis">Kuis</option>
+<option value="game">Game</option>
 </select>
-
 <label>Pertanyaan</label>
+<textarea id="pertanyaan" rows="4" placeholder="Tuliskan pertanyaan di sini"></textarea>
+<label>Kunci jawaban (untuk pencocokan otomatis)</label>
+<input id="kunci" placeholder="Contoh: 24 atau fotosintesis">
+<label>Petunjuk / bacaan (opsional)</label>
+<textarea id="text" rows="3" placeholder="Masukkan bacaan atau petunjuk"></textarea>
+<button onclick="simpanSoal()">Simpan Soal</button>
+<button class="secondary" onclick="bersihkanForm()">Kosongkan Form</button>
+<div id="bankMsg" class="notice" role="status"></div>
+<h3>Daftar Soal</h3>
+<div id="daftarSoal">Memuat soal...</div>
+</section>
 
-<textarea id="pertanyaan"
-placeholder="Tuliskan pertanyaan..."></textarea>
+<section id="kuis" class="panel hidden">
+<h2>Mode Kuis</h2>
+<p>Soal diambil dari bank soal. Siswa dapat mengetik jawaban atau menuliskannya di papan interaktif.</p>
+<label>Pilih bidang</label>
+<select id="filterKuis">
+<option value="">Semua bidang</option>
+<option value="Literasi">Literasi</option>
+<option value="Numerasi">Numerasi</option>
+</select>
+<button onclick="mulaiLatihan('kuis')">Mulai Kuis</button>
+<div id="areaKuis"></div>
+</section>
 
-<label>Kunci Jawaban</label>
+<section id="game" class="panel hidden">
+<h2>Mode Game</h2>
+<p>Jawab pertanyaan untuk memperoleh skor. Guru dapat memilih soal jenis Game di Bank Soal.</p>
+<button class="good" onclick="mulaiLatihan('game')">Mulai Game</button>
+<div id="areaGame"></div>
+</section>
+</section>
 
-<input type="text"
-id="kunci"
-placeholder="Tuliskan kunci jawaban">
-
-<button onclick="simpanSoal()">
-💾 Simpan Soal
-</button>
-
-<h3>📋 Daftar Soal</h3>
-
-<div id="daftarSoal"></div>
-
-</div>
-
-
-<!-- KUIS -->
-<div id="kuis" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<h2>🎯 MODE KUIS</h2>
-
-<p>
-Soal dari Bank Soal akan digunakan dalam mode kuis.
-</p>
-
-<div id="kuisSoal"></div>
-
-</div>
-
-
-<!-- GAME -->
-<div id="game" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<h2>🎮 MODE GAME</h2>
-
-<p>
-Soal dari Bank Soal juga dapat digunakan dalam permainan.
-</p>
-
-<div id="gameSoal"></div>
-
-</div>
-
-
-<!-- PAPAN -->
-<div id="papan" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<h2>✍️ PAPAN INTERAKTIF</h2>
-
-<p>
-Siswa dapat menjawab menggunakan jari atau stylus.
-</p>
-
-<canvas id="kanvas"
-style="width:100%;height:400px;border:3px solid #333;border-radius:12px;background:white;touch-action:none">
-</canvas>
-
-<br>
-
-<button onclick="bersihkan()">🗑️ Bersihkan</button>
-
-</div>
-
-</div>
-
+<section id="siswa" class="panel hidden">
+<h2 id="judulSiswa">Pertanyaan</h2>
+<div id="bacaanSiswa"></div>
+<p id="soalSiswa"></p>
+<label>Jawaban siswa</label>
+<textarea id="jawabanSiswa" rows="3" placeholder="Ketik jawaban di sini"></textarea>
+<p class="small">Papan tulis di bawah dapat digunakan untuk menulis dengan mouse atau layar sentuh. Tulisan tangan belum dibaca otomatis; gunakan kotak jawaban untuk pemeriksaan otomatis.</p>
+<canvas id="papan" aria-label="Papan tulis interaktif"></canvas>
+<button class="secondary" onclick="hapusPapan()">Hapus Papan</button>
+<button onclick="periksaJawaban()">Periksa Jawaban</button>
+<div id="hasilJawaban" class="notice" role="status"></div>
+<button class="good" onclick="soalBerikutnya()">Soal Berikutnya</button>
+<button class="secondary" onclick="kembaliKeGuru()">Kembali</button>
+</section>
+</main>
 
 <script>
+const SUPABASE_URL = "https://bhoocdndizlwrxahnqsj.supabase.co";
 
-function buka(id){
+/* Gunakan publishable key yang sudah ada di file lama.
+   Tempelkan nilainya di antara tanda kutip di bawah. */
+const SUPABASE_KEY = "kunci_publishable_milik_proyek";
 
-document.querySelectorAll('.halaman').forEach(function(h){
-h.classList.remove('aktif');
-});
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-document.getElementById(id).classList.add('aktif');
+let pengguna = null;
+let soalSaya = [];
+let sesiSoal = [];
+let indeks = 0;
+let modeAktif = "kuis";
+let skor = 0;
+let sedangDinilai = false;
+let editId = null;
 
-if(id=="bank"){
-tampilkanSoal();
+function pesan(id, teks) {
+  document.getElementById(id).textContent = teks;
 }
 
-if(id=="kuis"){
-tampilkanKuis();
+function aman(v) {
+  return String(v ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
 }
 
-if(id=="game"){
-tampilkanGame();
-}
-
-if(id=="papan"){
-aturCanvas();
-}
-
-}
-
-
-let soal = JSON.parse(localStorage.getItem("gongSoal")) || [];
-let indeksEdit = -1;
-
-function simpanSoal() {
-    const jenis = document.getElementById("jenis").value;
-    const pertanyaan = document.getElementById("pertanyaan").value.trim();
-    const pilihanA = document.getElementById("pilihanA").value.trim();
-    const pilihanB = document.getElementById("pilihanB").value.trim();
-    const pilihanC = document.getElementById("pilihanC").value.trim();
-    const pilihanD = document.getElementById("pilihanD").value.trim();
-    const kunci = document.getElementById("kunci").value;
-
-    if (!pertanyaan) {
-        alert("Pertanyaan belum diisi.");
-        return;
-    }
-
-    if (!pilihanA || !pilihanB || !pilihanC || !pilihanD) {
-        alert("Pilihan A, B, C, dan D wajib diisi.");
-        return;
-    }
-
-    if (!kunci) {
-        alert("Silakan pilih kunci jawaban.");
-        return;
-    }
-
-    const data = {
-        jenis: jenis,
-        pertanyaan: pertanyaan,
-        pilihanA: pilihanA,
-        pilihanB: pilihanB,
-        pilihanC: pilihanC,
-        pilihanD: pilihanD,
-        kunci: kunci
-    };
-
-    if (typeof indeksEdit !== "undefined" && indeksEdit !== -1) {
-        soal[indeksEdit] = data;
-        indeksEdit = -1;
-    } else {
-        soal.push(data);
-    }
-
-    localStorage.setItem("gongSoal", JSON.stringify(soal));
-
-    document.getElementById("pertanyaan").value = "";
-    document.getElementById("pilihanA").value = "";
-    document.getElementById("pilihanB").value = "";
-    document.getElementById("pilihanC").value = "";
-    document.getElementById("pilihanD").value = "";
-    document.getElementById("kunci").value = "";
-
-  function tampilkanSoal() {
-    let area = document.getElementById("daftarSoal");
-
-    if (!area) return;
-
-    area.innerHTML = "";
-
-    soal.forEach(function(s, i) {
-        area.innerHTML +=
-            '<div class="soal">' +
-            '<b>' + (i + 1) + '. ' + s.jenis.toUpperCase() + '</b>' +
-            '<p>' + s.pertanyaan + '</p>' +
-            '<p>A. ' + (s.pilihanA || '-') + '</p>' +
-            '<p>B. ' + (s.pilihanB || '-') + '</p>' +
-            '<p>C. ' + (s.pilihanC || '-') + '</p>' +
-            '<p>D. ' + (s.pilihanD || '-') + '</p>' +
-            '<small>Kunci: ' + s.kunci + '</small><br>' +
-            '<button onclick="editSoal(' + i + ')">✏️ Edit</button> ' +
-            '<button onclick="hapusSoal(' + i + ')">🗑️ Hapus</button>' +
-            '</div>';
-    });
-}
-
-
-function hapusSoal(index){
-
-if(confirm("Yakin ingin menghapus soal ini?")){
-
-soal.splice(index,1);
-
-localStorage.setItem("gongSoal",JSON.stringify(soal));
-tampilkanSoal();
-
-}
-
-}
-
-function editSoal(index) {
-    const s = soal[index];
-
-    if (!s) {
-        alert("Soal tidak ditemukan.");
-        return;
-    }
-
-    indeksEdit = index;
-
-    document.getElementById("jenis").value = s.jenis;
-    document.getElementById("pertanyaan").value = s.pertanyaan;
-    document.getElementById("pilihanA").value = s.pilihanA || "";
-    document.getElementById("pilihanB").value = s.pilihanB || "";
-    document.getElementById("pilihanC").value = s.pilihanC || "";
-    document.getElementById("pilihanD").value = s.pilihanD || "";
-    document.getElementById("kunci").value = s.kunci || "";
-
-    buka("bank");
-    document.getElementById("pertanyaan").focus();
-
-    alert("Silakan ubah soal, lalu klik Simpan Soal.");
-}
-function tampilkanKuis(){
-let area=document.getElementById("kuisSoal");
-
-if(!area)return;
-
-if(soal.length==0){
-area.innerHTML="<p>Belum ada soal. Silakan guru membuat soal di Bank Soal.</p>";
-return;
-}
-
-area.innerHTML="";
-
-soal.forEach(function(s,i){
-
-area.innerHTML +=
-'<div class="soal">'+
-'<h3>Soal '+(i+1)+'</h3>'+
-'<p>'+s.pertanyaan+'</p>'+
-'<textarea placeholder="Jawaban siswa..."></textarea>'+
-'</div>';
-
-});
-
-}
-
-
-function tampilkanGame(){
-
-let area=document.getElementById("gameSoal");
-
-if(!area)return;
-
-if(soal.length==0){
-area.innerHTML="<p>Belum ada soal untuk Game.</p>";
-return;
-}
-
-area.innerHTML="";
-
-soal.forEach(function(s,i){
-
-area.innerHTML +=
-'<div class="soal">'+
-'<h3>🎮 Tantangan '+(i+1)+'</h3>'+
-'<p>'+s.pertanyaan+'</p>'+
-'<button onclick="alert(\'Jawaban diterima!\')">JAWAB</button>'+
-'</div>';
-
-});
-
-}
-
-
-function cekNumerasi(){
-
-let jawaban=document.getElementById("jawabanNumerasi").value;
-
-if(jawaban.trim()=="24"){
-document.getElementById("hasilNumerasi").innerHTML=
-"🎉 BENAR! Hebat!";
-}else{
-document.getElementById("hasilNumerasi").innerHTML=
-"❌ Belum benar. Coba lagi.";
-}
-
-}
-
-
-const canvas=document.getElementById("kanvas");
-const ctx=canvas.getContext("2d");
-
-let gambar=false;
-
-
-function aturCanvas(){
-
-canvas.width=canvas.clientWidth;
-canvas.height=400;
-
-ctx.lineWidth=5;
-ctx.lineCap="round";
-}
-
-
-function posisi(e){
-
-let r=canvas.getBoundingClientRect();
-
-if(e.touches){
-return {
-x:e.touches[0].clientX-r.left,
-y:e.touches[0].clientY-r.top
-};
-}
-
-return {
-x:e.clientX-r.left,
-y:e.clientY-r.top
-};
-
-}
-
-
-function mulai(e){
-
-e.preventDefault();
-
-gambar=true;
-
-let p=posisi(e);
-
-ctx.beginPath();
-ctx.moveTo(p.x,p.y);
-
-}
-
-
-function go(e){
-
-if(!gambar)return;
-
-e.preventDefault();
-
-let p=posisi(e);
-
-ctx.lineTo(p.x,p.y);
-ctx.stroke();
-
-}
-
-
-function selesai(){
-
-gambar=false;
-ctx.beginPath();
-
-}
-
-
-function bersihkan(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-}
-
-
-canvas.addEventListener("mousedown",mulai);
-canvas.addEventListener("mousemove",go);
-canvas.addEventListener("mouseup",selesai);
-canvas.addEventListener("mouseleave",selesai);
-
-canvas.addEventListener("touchstart",mulai);
-canvas.addEventListener("touchmove",go);
-canvas.addEventListener("touchend",selesai);
 async function loginGuru() {
-    const email = document.getElementById("emailGuru").value.trim();
-    const password = document.getElementById("passwordGuru").value;
-    const pesan = document.getElementById("pesanLogin");
-
-    if (!email || !password) {
-        pesan.innerText = "Email dan password wajib diisi.";
-        return;
-    }
-
-    const { error } = await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-    });
-
-    if (error) {
-        pesan.innerText = "Login gagal: " + error.message;
-        return;
-    }
-
-    pesan.innerText = "Login berhasil!";
-    buka("menu");
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  if (!email || !password) {
+    pesan("loginMsg", "Masukkan email dan kata sandi.");
+    return;
+  }
+  pesan("loginMsg", "Sedang masuk...");
+  const {data,error} = await sb.auth.signInWithPassword({email,password});
+  if (error) {
+    pesan("loginMsg", "Login gagal: " + error.message);
+    return;
+  }
+  pengguna = data.user;
+  await bukaAplikasi();
 }
 
-async function lupaPassword() {
-    const email = document.getElementById("emailGuru").value.trim();
-    const pesan = document.getElementById("pesanLogin");
-
-    if (!email) {
-        pesan.innerText = "Masukkan email guru terlebih dahulu.";
-        return;
-    }
-
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: "https://belidariusj-ux.github.io/gong-belajar/index_online.html"
-    });
-
-    if (error) {
-        pesan.innerText = "Gagal mengirim email: " + error.message;
-        return;
-    }
-
-    pesan.innerText = "Email pemulihan dikirim. Periksa Kotak Masuk atau Spam.";
+async function bukaAplikasi() {
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  document.getElementById("userInfo").textContent =
+    "Guru masuk: " + (pengguna.email || "");
+  await muatSoal();
 }
-supabaseClient.auth.onAuthStateChange((event, session) => {
-    if (event === "PASSWORD_RECOVERY" && session) {
-        document.getElementById("formPasswordBaru").style.display = "block";
-        document.getElementById("pesanLogin").innerText =
-            "Silakan buat password baru.";
-    }
+
+async function logoutGuru() {
+  await sb.auth.signOut();
+  pengguna = null;
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("siswa").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+  pesan("loginMsg", "Anda sudah keluar.");
+}
+
+async function muatSoal() {
+  pesan("bankMsg", "Memuat bank soal...");
+  const {data,error} = await sb.from("soal").select("*").order("created",{ascending:false});
+  if (error) {
+    pesan("bankMsg", "Gagal membaca tabel soal: " + error.message);
+    document.getElementById("daftarSoal").textContent = "Soal belum dapat dimuat.";
+    return;
+  }
+  soalSaya = data || [];
+  tampilkanDaftar();
+  pesan("bankMsg", "Jumlah soal tersedia: " + soalSaya.length);
+}
+
+function tampilkanDaftar() {
+  const target = document.getElementById("daftarSoal");
+  if (!soalSaya.length) {
+    target.textContent = "Belum ada soal.";
+    return;
+  }
+  target.innerHTML = soalSaya.map(s => `
+    <div class="item">
+      <strong>${aman(s.mata_pelajaran || "Tanpa bidang")} · ${aman(s.jenis || "esai")}</strong>
+      <p>${aman(s.pertanyaan || "")}</p>
+      <p class="small">${aman(s.text || "")}</p>
+      <button onclick="editSoal('${aman(s.id)}')">Edit</button>
+      <button class="danger" onclick="hapusSoal('${aman(s.id)}')">Hapus</button>
+    </div>`).join("");
+}
+
+async function simpanSoal() {
+  if (!pengguna) {
+    pesan("bankMsg", "Silakan login sebagai guru.");
+    return;
+  }
+  const mapel = document.getElementById("mapel").value.trim();
+  const jenis = document.getElementById("jenis").value;
+  const pertanyaan = document.getElementById("pertanyaan").value.trim();
+  const kunci = document.getElementById("kunci").value.trim();
+  const text = document.getElementById("text").value.trim();
+
+  if (!mapel || !pertanyaan || !kunci) {
+    pesan("bankMsg", "Isi bidang, pertanyaan, dan kunci jawaban.");
+    return;
+  }
+
+  const record = {
+    guru_id: pengguna.id,
+    mata_pelajaran: mapel,
+    jenis,
+    text,
+    pertanyaan,
+    kunci
+  };
+
+  pesan("bankMsg", "Menyimpan soal...");
+  let hasil;
+  if (editId !== null) {
+    hasil = await sb.from("soal").update(record).eq("id",editId);
+  } else {
+    hasil = await sb.from("soal").insert(record);
+  }
+
+  if (hasil.error) {
+    pesan("bankMsg", "Soal gagal disimpan: " + hasil.error.message +
+      "\nPeriksa tipe kolom guru_id dan kebijakan akses Supabase.");
+    return;
+  }
+  pesan("bankMsg", "Soal berhasil disimpan.");
+  bersihkanForm();
+  await muatSoal();
+}
+
+function editSoal(id) {
+  const s = soalSaya.find(x => String(x.id) === String(id));
+  if (!s) return;
+  editId = s.id;
+  document.getElementById("mapel").value = s.mata_pelajaran || "";
+  document.getElementById("jenis").value = s.jenis || "esai";
+  document.getElementById("pertanyaan").value = s.pertanyaan || "";
+  document.getElementById("kunci").value = s.kunci || "";
+  document.getElementById("text").value = s.text || "";
+  pesan("bankMsg","Mode edit soal. Klik Simpan Soal untuk menyimpan perubahan.");
+  showPage("bank");
+}
+
+async function hapusSoal(id) {
+  if (!confirm("Hapus soal ini?")) return;
+  const {error} = await sb.from("soal").delete().eq("id",id);
+  if (error) {
+    pesan("bankMsg","Gagal menghapus soal: " + error.message);
+    return;
+  }
+  pesan("bankMsg","Soal berhasil dihapus.");
+  await muatSoal();
+}
+
+function bersihkanForm() {
+  editId = null;
+  ["mapel","pertanyaan","kunci","text"].forEach(id =>
+    document.getElementById(id).value = "");
+  document.getElementById("jenis").value = "esai";
+}
+
+function showPage(page) {
+  ["bank","kuis","game"].forEach(id =>
+    document.getElementById(id).classList.toggle("hidden",id !== page));
+  document.getElementById("siswa").classList.add("hidden");
+  if (page === "kuis" || page === "game") {
+    pesan(page === "kuis" ? "areaKuis" : "areaGame",
+      "Tekan tombol mulai untuk memulai.");
+  }
+}
+
+function mulaiLatihan(mode) {
+  modeAktif = mode;
+  let list = soalSaya.filter(s =>
+    String(s.jenis || "").toLowerCase() === mode);
+  if (mode === "kuis") {
+    const bidang = document.getElementById("filterKuis").value;
+    if (bidang) list = list.filter(s =>
+      String(s.mata_pelajaran || "").toLowerCase().includes(bidang.toLowerCase()));
+  }
+  if (!list.length) {
+    alert("Belum ada soal untuk mode " + mode + ". Tambahkan soal di Bank Soal.");
+    return;
+  }
+  sesiSoal = [...list].sort(() => Math.random() - 0.5);
+  indeks = 0;
+  skor = 0;
+  sedangDinilai = false;
+  tampilkanSoalSiswa();
+}
+
+function tampilkanSoalSiswa() {
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("siswa").classList.remove("hidden");
+  const s = sesiSoal[indeks];
+  if (!s) return;
+  document.getElementById("judulSiswa").textContent =
+    (modeAktif === "game" ? "Game" : "Kuis") +
+    " · Soal " + (indeks + 1) + " dari " + sesiSoal.length;
+  document.getElementById("bacaanSiswa").textContent = s.text || "";
+  document.getElementById("soalSiswa").textContent = s.pertanyaan || "";
+  document.getElementById("jawabanSiswa").value = "";
+  pesan("hasilJawaban","");
+  hapusPapan();
+  sedangDinilai = false;
+}
+
+function periksaJawaban() {
+  if (sedangDinilai) {
+    pesan("hasilJawaban","Jawaban soal ini sudah diperiksa. Tekan Soal Berikutnya.");
+    return;
+  }
+  const s = sesiSoal[indeks];
+  const jawaban = norm(document.getElementById("jawabanSiswa").value);
+  const kunci = norm(s.kunci);
+  if (!jawaban) {
+    pesan("hasilJawaban","Silakan ketik jawaban terlebih dahulu. Tulisan pada papan belum dibaca otomatis.");
+    return;
+  }
+  sedangDinilai = true;
+  if (jawaban === kunci) {
+    skor += 100 / sesiSoal.length;
+    pesan("hasilJawaban","Jawaban cocok. Skor sementara: " + Math.round(skor));
+  } else {
+    pesan("hasilJawaban","Jawaban belum cocok dengan kunci. Minta guru memeriksa jawaban ini.");
+  }
+}
+
+function norm(v) {
+  return String(v || "").trim().toLocaleLowerCase("id-ID")
+    .replace(/\s+/g," ").replace(/[.!?]+$/,"");
+}
+
+function soalBerikutnya() {
+  if (!sedangDinilai) {
+    pesan("hasilJawaban","Periksa jawaban terlebih dahulu.");
+    return;
+  }
+  indeks++;
+  if (indeks >= sesiSoal.length) {
+    document.getElementById("judulSiswa").textContent = "Latihan selesai";
+    document.getElementById("bacaanSiswa").textContent = "";
+    document.getElementById("soalSiswa").textContent =
+      "Skor otomatis: " + Math.round(skor) + " dari 100.";
+    document.getElementById("jawabanSiswa").classList.add("hidden");
+    document.getElementById("papan").classList.add("hidden");
+    pesan("hasilJawaban","Latihan selesai. Skor ini hanya berdasarkan jawaban yang cocok persis dengan kunci.");
+    return;
+  }
+  document.getElementById("jawabanSiswa").classList.remove("hidden");
+  document.getElementById("papan").classList.remove("hidden");
+  tampilkanSoalSiswa();
+}
+
+function kembaliKeGuru() {
+  document.getElementById("siswa").classList.add("hidden");
+  document.getElementById("jawabanSiswa").classList.remove("hidden");
+  document.getElementById("papan").classList.remove("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  showPage(modeAktif === "game" ? "game" : "kuis");
+}
+
+const canvas = document.getElementById("papan");
+const ctx = canvas.getContext("2d");
+let menggambar = false;
+
+function aturCanvas() {
+  const r = canvas.getBoundingClientRect();
+  if (!r.width || !r.height) return;
+  const dpr = window.devicePixelRatio || 1;
+  const temp = document.createElement("canvas");
+  temp.width = canvas.width;
+  temp.height = canvas.height;
+  temp.getContext("2d").drawImage(canvas,0,0);
+  canvas.width = Math.round(r.width*dpr);
+  canvas.height = Math.round(r.height*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.lineWidth = 3;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = "#174ea6";
+  if (temp.width && temp.height) {
+    ctx.drawImage(temp,0,0,temp.width,temp.height,0,0,r.width,r.height);
+  }
+}
+function posisi(e) {
+  const r = canvas.getBoundingClientRect();
+  return {x:e.clientX-r.left,y:e.clientY-r.top};
+}
+canvas.addEventListener("pointerdown",e=>{
+  menggambar=true; canvas.setPointerCapture(e.pointerId);
+  const p=posisi(e); ctx.beginPath(); ctx.moveTo(p.x,p.y);
 });
-async function simpanPasswordBaru() {
-    const password = document.getElementById("passwordBaru").value;
-    const konfirmasi = document.getElementById("konfirmasiPasswordBaru").value;
-    const pesan = document.getElementById("pesanPasswordBaru");
-
-    if (!password || !konfirmasi) {
-        pesan.innerText = "Kedua kolom password wajib diisi.";
-        return;
-    }
-
-    if (password.length < 6) {
-        pesan.innerText = "Password minimal 6 karakter.";
-        return;
-    }
-
-    if (password !== konfirmasi) {
-        pesan.innerText = "Kedua password belum sama.";
-        return;
-    }
-
-    const { error } = await supabaseClient.auth.updateUser({
-        password: password
-    });
-
-    if (error) {
-        pesan.innerText = "Gagal menyimpan password: " + error.message;
-        return;
-    }
-
-    pesan.innerText = "Password berhasil diubah. Silakan login kembali.";
+canvas.addEventListener("pointermove",e=>{
+  if(!menggambar)return;
+  const p=posisi(e);ctx.lineTo(p.x,p.y);ctx.stroke();
+});
+canvas.addEventListener("pointerup",()=>menggambar=false);
+canvas.addEventListener("pointercancel",()=>menggambar=false);
+function hapusPapan() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 }
+window.addEventListener("resize",aturCanvas);
+aturCanvas();
+
+(async function pulihkanSesi() {
+  if (SUPABASE_KEY === "TEMPEL_SB_PUBLISHABLE_KEY_DI_SINI") {
+    pesan("loginMsg","Konfigurasi belum lengkap. Ganti teks TEMPEL_SB_PUBLISHABLE_KEY_DI_SINI dengan publishable key proyek Bapak.");
+    return;
+  }
+  const {data} = await sb.auth.getSession();
+  if (data.session) {
+    pengguna = data.session.user;
+    await bukaAplikasi();
+  }
+})();
 </script>
 </body>
-</html
+</html>
+
+
+
