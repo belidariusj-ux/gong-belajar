@@ -298,21 +298,24 @@ function simpanSoal(){
   soal.push(data);
  }
 function aturPilihanSoal(){
- const kategori=document.getElementById("kategori");
- const bagianPilihan=document.getElementById("bagianPilihan");
+ const kategori = document.getElementById("kategori");
+ const bagianPilihan = document.getElementById("bagianPilihan");
 
- if(!kategori || !bagianPilihan) return;
+ if (!kategori || !bagianPilihan) return;
 
- bagianPilihan.style.display =
-  kategori.value==="Literasi" ? "none" : "block";
+ bagianPilihan.style.setProperty(
+  "display",
+  kategori.value.trim() === "Literasi" ? "none" : "block",
+  "important"
+ );
 }
 
-document.getElementById("kategori").addEventListener(
- "change",
- aturPilihanSoal
-);
+const kategoriSoal = document.getElementById("kategori");
 
-aturPilihanSoal();
+if (kategoriSoal) {
+ kategoriSoal.addEventListener("change", aturPilihanSoal);
+ aturPilihanSoal();
+}
  simpanSemua();
  kosongkanForm();
  alert("Soal berhasil disimpan pada browser ini.");
