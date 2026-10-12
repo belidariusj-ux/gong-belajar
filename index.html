@@ -293,7 +293,22 @@ function simpanSoal(){
  }else{
   soal.push(data);
  }
+function aturPilihanSoal(){
+ const kategori=document.getElementById("kategori");
+ const bagianPilihan=document.getElementById("bagianPilihan");
 
+ if(!kategori || !bagianPilihan) return;
+
+ bagianPilihan.style.display =
+  kategori.value==="Literasi" ? "none" : "block";
+}
+
+document.getElementById("kategori").addEventListener(
+ "change",
+ aturPilihanSoal
+);
+
+aturPilihanSoal();
  simpanSemua();
  kosongkanForm();
  alert("Soal berhasil disimpan pada browser ini.");
