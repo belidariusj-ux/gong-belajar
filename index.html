@@ -127,14 +127,16 @@ footer{text-align:center;padding:22px;color:#64748b;font-size:13px}
 </select>
 <label>Pertanyaan</label>
 <textarea id="pertanyaan" placeholder="Tuliskan pertanyaan..."></textarea>
-<label>Pilihan A (opsional)</label>
-<input id="opsiA" placeholder="Pilihan A">
-<label>Pilihan B (opsional)</label>
-<input id="opsiB" placeholder="Pilihan B">
-<label>Pilihan C (opsional)</label>
-<input id="opsiC" placeholder="Pilihan C">
-<label>Pilihan D (opsional)</label>
-<input id="opsiD" placeholder="Pilihan D">
+<div id="bagianPilihan">
+  <label>Pilihan A (opsional)</label>
+  <input id="opsiA" placeholder="Pilihan A">
+  <label>Pilihan B (opsional)</label>
+  <input id="opsiB" placeholder="Pilihan B">
+  <label>Pilihan C (opsional)</label>
+  <input id="opsiC" placeholder="Pilihan C">
+  <label>Pilihan D (opsional)</label>
+  <input id="opsiD" placeholder="Pilihan D">
+</div>
 <label>Kunci jawaban (opsional)</label>
 <input id="kunci" placeholder="Contoh: A atau 173">
 <div class="actions">
@@ -264,22 +266,34 @@ function kosongkanForm(){
 }
 function simpanSoal(){
  const pertanyaan=document.getElementById("pertanyaan").value.trim();
- if(!pertanyaan){alert("Silakan isi pertanyaan terlebih dahulu.");return;}
+
+ if(!pertanyaan){
+  alert("Silakan isi pertanyaan terlebih dahulu.");
+  return;
+ }
+
  const id=document.getElementById("editId").value;
+ const kategori=document.getElementById("kategori").value;
+
  const data={
   id:id||String(Date.now()),
-  kategori:document.getElementById("kategori").value,
-  pertanyaan,
-  opsiA:document.getElementById("opsiA").value.trim(),
-  opsiB:document.getElementById("opsiB").value.trim(),
-  opsiC:document.getElementById("opsiC").value.trim(),
-  opsiD:document.getElementById("opsiD").value.trim(),
+  kategori:kategori,
+  pertanyaan:pertanyaan,
+  opsiA:kategori==="Literasi"?"":document.getElementById("opsiA").value.trim(),
+  opsiB:kategori==="Literasi"?"":document.getElementById("opsiB").value.trim(),
+  opsiC:kategori==="Literasi"?"":document.getElementById("opsiC").value.trim(),
+  opsiD:kategori==="Literasi"?"":document.getElementById("opsiD").value.trim(),
   kunci:document.getElementById("kunci").value.trim()
  };
+
  if(id){
-  const i=soal.findIndex(s=>s.id===id);
+  const i=soal.findIndex(s=>String(s.id)===String(id));
   if(i>=0)soal[i]=data;
- }else soal.push(data);
+  else soal.push(data);
+ }else{
+  soal.push(data);
+ }
+
  simpanSemua();
  kosongkanForm();
  alert("Soal berhasil disimpan pada browser ini.");
