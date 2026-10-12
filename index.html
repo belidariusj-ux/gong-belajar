@@ -3,555 +3,436 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gong Belajar - Tahap 3B</title>
-
+<title>Gong Belajar - SMPN 3 Amabi Oefeto</title>
 <style>
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#eef3f8;
-    color:#17324d;
-}
-header{
-    background:#1769aa;
-    color:white;
-    text-align:center;
-    padding:20px;
-}
-header h1{margin:0 0 8px}
-header p{margin:0}
-
-.container{
-    max-width:1000px;
-    margin:25px auto;
-    padding:15px;
-}
-
-.halaman{
-    display:none;
-    background:white;
-    border-radius:18px;
-    padding:25px;
-    box-shadow:0 5px 15px rgba(0,0,0,.12);
-}
-.halaman.aktif{display:block}
-
-.menu{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px;
-}
-
-.card{
-    background:white;
-    border-radius:18px;
-    padding:25px 15px;
-    text-align:center;
-    box-shadow:0 5px 15px rgba(0,0,0,.12);
-    cursor:pointer;
-}
-
-.icon{font-size:48px}
-
-button{
-    border:0;
-    border-radius:10px;
-    padding:12px 18px;
-    font-size:16px;
-    background:#1769aa;
-    color:white;
-    cursor:pointer;
-    margin:5px;
-}
-
-input,select,textarea{
-    width:100%;
-    box-sizing:border-box;
-    padding:12px;
-    margin:7px 0 15px;
-    border:1px solid #bbb;
-    border-radius:8px;
-    font-size:16px;
-}
-
-textarea{
-    min-height:120px;
-}
-
-.soal{
-    background:#f4f7fa;
-    border-radius:12px;
-    padding:15px;
-    margin:10px 0;
-}
-
-@media(max-width:700px){
-    .menu{grid-template-columns:1fr}
-}
+:root{--biru:#1456a0;--hijau:#16845b;--bg:#f1f5f9}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#1e293b}
+header{background:linear-gradient(120deg,#123d78,#167a91);color:white;padding:22px 15px;text-align:center}
+header h1{margin:0 0 8px;font-size:27px}
+header p{margin:4px}
+nav{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;background:#fff;padding:12px;position:sticky;top:0;z-index:5;box-shadow:0 2px 6px #0001}
+button,.navbtn{border:0;border-radius:9px;padding:11px 15px;background:var(--biru);color:white;cursor:pointer;font-size:14px}
+button:hover{filter:brightness(.92)}
+nav button{background:#e5edf8;color:#173b68;font-weight:bold}
+nav button.active{background:var(--biru);color:white}
+main{max-width:1100px;margin:20px auto;padding:0 14px}
+.page{display:none}
+.page.active{display:block}
+.card{background:white;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 3px 12px #0000000b}
+h2{color:var(--biru);margin-top:0}
+h3{margin-top:0}
+input,textarea,select{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;margin:6px 0 13px;font:inherit}
+textarea{min-height:100px;resize:vertical}
+label{font-weight:bold;display:block;margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.tile{background:white;border-radius:13px;padding:20px;border-left:5px solid var(--hijau);cursor:pointer;box-shadow:0 2px 8px #0001}
+.tile strong{display:block;font-size:18px;margin-bottom:8px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.green{background:var(--hijau)}
+.red{background:#b91c1c}
+.orange{background:#b45309}
+.muted{color:#64748b;font-size:14px}
+.item{border:1px solid #dbe3ed;border-radius:9px;padding:13px;margin:10px 0}
+#papan{width:100%;height:380px;border:3px solid #b7c8dc;border-radius:10px;background:white;touch-action:none;display:block;cursor:crosshair}
+#bacaanTampil{white-space:pre-wrap;line-height:1.8;font-size:18px}
+#pertanyaanTampil{font-size:22px;line-height:1.6}
+footer{text-align:center;padding:22px;color:#64748b;font-size:13px}
+.hidden{display:none!important}
+.status{padding:10px;border-radius:8px;background:#e8f5ee;margin:10px 0}
 </style>
 </head>
-
 <body>
 
 <header>
 <h1>🎓 GONG BELAJAR</h1>
-<p>UPTD SMPN 3 Amabi Oefeto • TP 2026/2027</p>
+<p>Literasi • Numerasi • Kuis • Papan Interaktif</p>
+<p><strong>UPTD SMP Negeri 3 Amabi Oefeto</strong></p>
+<p>Tahun Pelajaran 2026/2027</p>
 </header>
 
-<div class="container">
+<nav id="menu">
+<button class="active" onclick="buka('dashboard',this)">🏠 Dashboard</button>
+<button onclick="buka('literasi',this)">📖 Literasi</button>
+<button onclick="buka('numerasi',this)">🔢 Numerasi</button>
+<button onclick="buka('bank',this)">📝 Bank Soal</button>
+<button onclick="buka('kuis',this)">❓ Mode Kuis</button>
+<button onclick="buka('game',this)">🎮 Mode Game</button>
+<button onclick="buka('papanPage',this)">✍️ Papan Interaktif</button>
+<button onclick="buka('login',this)">🔐 Login Guru</button>
+</nav>
 
-<!-- MENU UTAMA -->
-<div id="menu" class="halaman aktif">
-
-<h2 style="text-align:center">🏠 MENU UTAMA</h2>
-
-<div class="menu">
-
-<div class="card" onclick="buka('literasi')">
-<div class="icon">📚</div>
-<h2>LITERASI</h2>
-<p>Membaca dan memahami teks.</p>
+<main>
+<section id="dashboard" class="page active">
+<div class="card">
+<h2>Selamat Datang di Gong Belajar!</h2>
+<p>Aplikasi pembelajaran interaktif untuk membantu guru dan siswa belajar bersama melalui bacaan, soal numerasi, kuis, permainan, dan papan tulis digital.</p>
+<div class="status" id="modeInfo">Mode penyimpanan: lokal pada browser ini.</div>
 </div>
-
-<div class="card" onclick="buka('numerasi')">
-<div class="icon">🔢</div>
-<h2>NUMERASI</h2>
-<p>Berhitung dan memecahkan masalah.</p>
+<div class="grid">
+<div class="tile" onclick="buka('literasi')"><strong>📖 Literasi</strong>Menampilkan bacaan dan pertanyaan pemahaman.</div>
+<div class="tile" onclick="buka('numerasi')"><strong>🔢 Numerasi</strong>Belajar berhitung dan menyelesaikan masalah.</div>
+<div class="tile" onclick="buka('bank')"><strong>📝 Bank Soal</strong>Membuat dan mengelola soal.</div>
+<div class="tile" onclick="buka('kuis')"><strong>❓ Mode Kuis</strong>Siswa menjawab soal dan memeriksa hasil.</div>
+<div class="tile" onclick="buka('game')"><strong>🎮 Mode Game</strong>Latihan soal dengan perolehan skor.</div>
+<div class="tile" onclick="buka('papanPage')"><strong>✍️ Papan Interaktif</strong>Siswa menulis jawaban langsung di layar.</div>
 </div>
-
-<div class="card" onclick="buka('bank')">
-<div class="icon">📝</div>
-<h2>BANK SOAL</h2>
-<p>Guru membuat dan menyimpan soal.</p>
+<div class="card">
+<h3>Jumlah soal tersimpan: <span id="jumlahSoal">0</span></h3>
+<p class="muted">Materi lokal tersimpan di browser/perangkat yang digunakan. Untuk berbagi materi antarperangkat, sambungkan Supabase pada tahap berikutnya.</p>
 </div>
+</section>
 
-<div class="card" onclick="buka('kuis')">
-<div class="icon">🎯</div>
-<h2>MODE KUIS</h2>
-<p>Latihan dan evaluasi.</p>
-</div>
-
-<div class="card" onclick="buka('game')">
-<div class="icon">🎮</div>
-<h2>MODE GAME</h2>
-<p>Belajar sambil bermain.</p>
-</div>
-
-<div class="card" onclick="buka('papan')">
-<div class="icon">✍️</div>
-<h2>PAPAN INTERAKTIF</h2>
-<p>Siswa menjawab langsung.</p>
-</div>
-
+<section id="literasi" class="page">
+<div class="card">
+<h2>📖 Literasi</h2>
+<label>Judul bacaan</label>
+<input id="judulBacaan" placeholder="Contoh: Menjaga Kebersihan Sekolah">
+<label>Teks bacaan</label>
+<textarea id="isiBacaan" placeholder="Masukkan bacaan yang akan dipelajari siswa..."></textarea>
+<div class="actions">
+<button onclick="simpanBacaan()">Simpan Bacaan</button>
+<button class="green" onclick="tampilkanBacaan()">Tampilkan untuk Siswa</button>
+<button class="orange" onclick="buka('papanPage')">Jawab di Papan</button>
 </div>
 </div>
-
-
-<!-- LITERASI -->
-<div id="literasi" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<div class="soal">
-<h2>📚 LITERASI</h2>
-
-<h3>📖 Bacaan</h3>
-
-<textarea
-id="bacaanLiterasi"
-rows="8"
-placeholder="Guru menuliskan bacaan di sini..."></textarea>
-<h3>✍️ Jawaban Siswa</h3>
-
-<textarea
-id="jawabanLiterasi"
-rows="5"
-placeholder="Siswa menuliskan jawaban di sini..."></textarea>
-
-<button onclick="alert('Jawaban literasi diterima!')">
-✅ Kirim Jawaban
-</button>
-
+<div class="card">
+<h3 id="judulBacaanTampil">Bacaan untuk Siswa</h3>
+<div id="bacaanTampil">Bacaan yang disimpan akan tampil di sini.</div>
 </div>
+</section>
+
+<section id="numerasi" class="page">
+<div class="card">
+<h2>🔢 Numerasi</h2>
+<p>Buat soal numerasi di Bank Soal, lalu tampilkan melalui Mode Kuis atau Papan Interaktif.</p>
+<button onclick="buka('bank');pilihKategori('Numerasi')">➕ Buat Soal Numerasi</button>
+<button class="green" onclick="mulaiLatihan('Numerasi')">▶ Mulai Latihan Numerasi</button>
 </div>
-
-<!-- NUMERASI -->
-<div id="numerasi" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<h2>🔢 NUMERASI</h2>
-
-<p>
-Numerasi digunakan untuk memahami angka,
-operasi hitung dan memecahkan masalah kehidupan sehari-hari.
-</p>
-
-<div class="soal">
-
-<p>
-Contoh:
-
-Jika 3 × 8 = ..., berapakah hasilnya?
-</p>
-
-<input type="text" id="jawabanNumerasi"
-placeholder="Tuliskan jawaban">
-
-<button onclick="cekNumerasi()">
-✅ Periksa Jawaban
-</button>
-
-<p id="hasilNumerasi"></p>
-
+<div class="card">
+<h3>Contoh latihan</h3>
+<p>Di perpustakaan terdapat 125 buku. Sekolah menerima tambahan 48 buku. Berapa jumlah buku sekarang?</p>
+<button onclick="buka('papanPage')">Siswa Kerjakan di Papan</button>
 </div>
+</section>
 
-</div>
-
-
-<!-- BANK SOAL -->
-<div id="bank" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<h2>📝 BANK SOAL GURU</h2>
-
-<label>Jenis Soal</label>
-
-<select id="jenis">
-<option value="literasi">📚 Literasi</option>
-<option value="numerasi">🔢 Numerasi</option>
+<section id="bank" class="page">
+<div class="card">
+<h2>📝 Bank Soal</h2>
+<input type="hidden" id="editId">
+<label>Kategori</label>
+<select id="kategori">
+<option>Literasi</option>
+<option>Numerasi</option>
 </select>
-
 <label>Pertanyaan</label>
-
-<textarea id="pertanyaan"
-placeholder="Tuliskan pertanyaan..."></textarea>
-
-<label>Kunci Jawaban</label>
-
-<input type="text"
-id="kunci"
-placeholder="Tuliskan kunci jawaban">
-
-<button onclick="simpanSoal()">
-💾 Simpan Soal
-</button>
-
-<h3>📋 Daftar Soal</h3>
-
+<textarea id="pertanyaan" placeholder="Tuliskan pertanyaan..."></textarea>
+<label>Pilihan A (opsional)</label>
+<input id="opsiA" placeholder="Pilihan A">
+<label>Pilihan B (opsional)</label>
+<input id="opsiB" placeholder="Pilihan B">
+<label>Pilihan C (opsional)</label>
+<input id="opsiC" placeholder="Pilihan C">
+<label>Pilihan D (opsional)</label>
+<input id="opsiD" placeholder="Pilihan D">
+<label>Kunci jawaban (opsional)</label>
+<input id="kunci" placeholder="Contoh: A atau 173">
+<div class="actions">
+<button onclick="simpanSoal()">💾 Simpan Soal</button>
+<button class="orange" onclick="kosongkanForm()">Form Baru</button>
+<button class="green" onclick="mulaiLatihan()">▶ Gunakan untuk Kuis</button>
+</div>
+<p class="muted">Untuk soal terbuka, pilihan jawaban boleh dikosongkan. Jawaban siswa dapat ditulis di papan.</p>
+</div>
+<div class="card">
+<h3>Daftar Soal</h3>
+<label>Filter kategori</label>
+<select id="filterKategori" onchange="tampilkanSoal()">
+<option value="">Semua kategori</option>
+<option>Literasi</option>
+<option>Numerasi</option>
+</select>
 <div id="daftarSoal"></div>
-
 </div>
+</section>
 
-
-<!-- KUIS -->
-<div id="kuis" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<h2>🎯 MODE KUIS</h2>
-
-<p>
-Soal dari Bank Soal akan digunakan dalam mode kuis.
-</p>
-
-<div id="kuisSoal"></div>
-
+<section id="kuis" class="page">
+<div class="card">
+<h2>❓ Mode Kuis</h2>
+<div class="actions">
+<button onclick="mulaiLatihan()">Mulai Semua Soal</button>
+<button class="green" onclick="mulaiLatihan('Literasi')">Kuis Literasi</button>
+<button class="green" onclick="mulaiLatihan('Numerasi')">Kuis Numerasi</button>
 </div>
-
-
-<!-- GAME -->
-<div id="game" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<h2>🎮 MODE GAME</h2>
-
-<p>
-Soal dari Bank Soal juga dapat digunakan dalam permainan.
-</p>
-
-<div id="gameSoal"></div>
-
+<div id="areaKuis"><p>Pilih salah satu tombol untuk memulai kuis.</p></div>
 </div>
+</section>
 
-
-<!-- PAPAN -->
-<div id="papan" class="halaman">
-
-<button onclick="buka('menu')">⬅ Kembali</button>
-
-<h2>✍️ PAPAN INTERAKTIF</h2>
-
-<p>
-Siswa dapat menjawab menggunakan jari atau stylus.
-</p>
-
-<canvas id="kanvas"
-style="width:100%;height:400px;border:3px solid #333;border-radius:12px;background:white;touch-action:none">
-</canvas>
-
-<br>
-
-<button onclick="bersihkan()">🗑️ Bersihkan</button>
-
+<section id="game" class="page">
+<div class="card">
+<h2>🎮 Mode Game</h2>
+<p>Jawab pertanyaan untuk mendapatkan poin. Guru dan siswa dapat membahas jawaban setelah setiap soal.</p>
+<button class="green" onclick="mulaiGame()">🎯 Mulai Permainan</button>
+<div id="areaGame"></div>
 </div>
+</section>
 
+<section id="papanPage" class="page">
+<div class="card">
+<h2>✍️ Papan Interaktif</h2>
+<p>Siswa dapat menulis, menggambar, membuat hitungan, atau menjelaskan jawaban langsung pada papan.</p>
+<div class="actions">
+<label style="display:flex;align-items:center;gap:8px">Warna
+<input id="warnaPena" type="color" value="#163d79" style="width:55px;margin:0;padding:2px"></label>
+<label style="display:flex;align-items:center;gap:8px">Ukuran pena
+<input id="ukuranPena" type="range" min="2" max="18" value="4" style="width:100px;margin:0"></label>
+<button class="orange" onclick="modePenghapus()">🧽 Penghapus</button>
+<button onclick="modePena()">✏️ Pena</button>
+<button class="red" onclick="hapusPapan()">Bersihkan Papan</button>
+<button class="green" onclick="simpanPapan()">💾 Simpan Gambar</button>
 </div>
+<canvas id="papan"></canvas>
+<p class="muted">Jika sentuhan tidak berfungsi, pastikan layar interaktif terhubung dengan kabel USB sentuh selain HDMI. Mouse dapat digunakan sebagai alternatif.</p>
+</div>
+<div class="card">
+<h3>Soal yang sedang dibahas</h3>
+<div id="soalPapan">Pilih soal dari Bank Soal atau tampilkan soal dari Mode Kuis.</div>
+<button onclick="buka('bank')">Pilih dari Bank Soal</button>
+</div>
+</section>
 
+<section id="login" class="page">
+<div class="card">
+<h2>🔐 Login Guru</h2>
+<p>Login online memerlukan pengaturan Supabase. Bagian ini belum terhubung sampai URL, kunci publik, dan tabel database diisi.</p>
+<label>Email guru</label>
+<input type="email" id="emailGuru" placeholder="email guru">
+<label>Password</label>
+<input type="password" id="passwordGuru" placeholder="Password">
+<button onclick="loginGuru()">Login</button>
+<button class="orange" onclick="logoutGuru()">Keluar</button>
+<p id="pesanLogin" class="muted">Mode lokal tetap dapat digunakan tanpa login.</p>
+</div>
+</section>
+</main>
+
+<footer>Gong Belajar Literasi/Numerasi • UPTD SMP Negeri 3 Amabi Oefeto • TP 2026/2027</footer>
 
 <script>
+const KUNCI_SOAL="gongBelajarSoal2026";
+const KUNCI_BACAAN="gongBelajarBacaan2026";
+let soal=JSON.parse(localStorage.getItem(KUNCI_SOAL)||"[]");
+let soalAktif=[];
+let indeks=0;
+let skor=0;
+let gameMode=false;
+let penghapus=false;
+let guruLogin=false;
 
-function buka(id){
-
-document.querySelectorAll('.halaman').forEach(function(h){
-h.classList.remove('aktif');
-});
-
-document.getElementById(id).classList.add('aktif');
-
-if(id=="bank"){
-tampilkanSoal();
+function buka(id,tombol){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ const halaman=document.getElementById(id);
+ if(halaman)halaman.classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ if(tombol)tombol.classList.add("active");
+ if(id==="bank")tampilkanSoal();
+ if(id==="dashboard")perbaruiJumlah();
+ if(id==="papanPage")setTimeout(aturPapan,50);
 }
-
-if(id=="kuis"){
-tampilkanKuis();
+function simpanSemua(){
+ localStorage.setItem(KUNCI_SOAL,JSON.stringify(soal));
+ tampilkanSoal();
+ perbaruiJumlah();
 }
-
-if(id=="game"){
-tampilkanGame();
+function perbaruiJumlah(){
+ document.getElementById("jumlahSoal").textContent=soal.length;
 }
-
-if(id=="papan"){
-aturCanvas();
+function pilihKategori(k){
+ document.getElementById("kategori").value=k;
 }
-
+function kosongkanForm(){
+ ["editId","pertanyaan","opsiA","opsiB","opsiC","opsiD","kunci"].forEach(id=>document.getElementById(id).value="");
+ document.getElementById("kategori").value="Literasi";
 }
-
-
-let soal = JSON.parse(localStorage.getItem("gongSoal")) || [];
-
-
 function simpanSoal(){
-
-let jenis=document.getElementById("jenis").value;
-let pertanyaan=document.getElementById("pertanyaan").value.trim();
-let kunci=document.getElementById("kunci").value.trim();
-
-if(pertanyaan==""){
-alert("Pertanyaan belum diisi.");
-return;
-}
-
-let data={
-jenis:jenis,
-pertanyaan:pertanyaan,
-kunci:kunci
-};
-
-soal.push(data);
-
-localStorage.setItem("gongSoal",JSON.stringify(soal));
-
-document.getElementById("pertanyaan").value="";
-document.getElementById("kunci").value="";
-
-tampilkanSoal();
-
-alert("Soal berhasil disimpan.");
-
+ const pertanyaan=document.getElementById("pertanyaan").value.trim();
+ if(!pertanyaan){alert("Silakan isi pertanyaan terlebih dahulu.");return;}
+ const id=document.getElementById("editId").value;
+ const data={
+  id:id||String(Date.now()),
+  kategori:document.getElementById("kategori").value,
+  pertanyaan,
+  opsiA:document.getElementById("opsiA").value.trim(),
+  opsiB:document.getElementById("opsiB").value.trim(),
+  opsiC:document.getElementById("opsiC").value.trim(),
+  opsiD:document.getElementById("opsiD").value.trim(),
+  kunci:document.getElementById("kunci").value.trim()
+ };
+ if(id){
+  const i=soal.findIndex(s=>s.id===id);
+  if(i>=0)soal[i]=data;
+ }else soal.push(data);
+ simpanSemua();
+ kosongkanForm();
+ alert("Soal berhasil disimpan pada browser ini.");
 }
 function tampilkanSoal(){
-
-let area=document.getElementById("daftarSoal");
-
-if(!area)return;
-
-area.innerHTML="";
-
-soal.forEach(function(s,i){
-
-area.innerHTML +=
-'<div class="soal">'+
-'<b>'+(i+1)+'. '+s.jenis.toUpperCase()+'</b>'+
-'<p>'+s.pertanyaan+'</p>'+
-'<small>Kunci: '+s.kunci+'</small><br>'+
-'<button onclick="editSoal('+i+')">✏️ Edit</button>'+
-'<button onclick="hapusSoal('+i+')">🗑️ Hapus</button>'+
-'</div>';
-
+ const area=document.getElementById("daftarSoal");
+ if(!area)return;
+ const filter=document.getElementById("filterKategori").value;
+ const data=soal.filter(s=>!filter||s.kategori===filter);
+ if(!data.length){area.innerHTML="<p>Belum ada soal pada kategori ini.</p>";return;}
+ area.innerHTML=data.map(s=>`
+ <div class="item">
+ <b>${aman(s.kategori)}</b><p>${aman(s.pertanyaan)}</p>
+ <div class="actions">
+ <button onclick="editSoal('${s.id}')">Edit</button>
+ <button class="green" onclick="tampilkanDiPapan('${s.id}')">Tampilkan</button>
+ <button class="red" onclick="hapusSoal('${s.id}')">Hapus</button>
+ </div></div>`).join("");
+}
+function aman(teks){
+ return String(teks??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function editSoal(id){
+ const s=soal.find(x=>x.id===id);if(!s)return;
+ document.getElementById("editId").value=s.id;
+ document.getElementById("kategori").value=s.kategori;
+ document.getElementById("pertanyaan").value=s.pertanyaan;
+ document.getElementById("opsiA").value=s.opsiA||"";
+ document.getElementById("opsiB").value=s.opsiB||"";
+ document.getElementById("opsiC").value=s.opsiC||"";
+ document.getElementById("opsiD").value=s.opsiD||"";
+ document.getElementById("kunci").value=s.kunci||"";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function hapusSoal(id){
+ if(!confirm("Hapus soal ini?"))return;
+ soal=soal.filter(s=>s.id!==id);simpanSemua();
+}
+function tampilkanDiPapan(id){
+ const s=soal.find(x=>x.id===id);if(!s)return;
+ document.getElementById("soalPapan").innerHTML="<h3>"+aman(s.kategori)+"</h3><p>"+aman(s.pertanyaan)+"</p>";
+ buka("papanPage");
+}
+function simpanBacaan(){
+ const data={judul:document.getElementById("judulBacaan").value,isi:document.getElementById("isiBacaan").value};
+ localStorage.setItem(KUNCI_BACAAN,JSON.stringify(data));
+ tampilkanBacaan();alert("Bacaan tersimpan di browser ini.");
+}
+function tampilkanBacaan(){
+ const b=JSON.parse(localStorage.getItem(KUNCI_BACAAN)||"null");
+ if(!b){alert("Belum ada bacaan yang disimpan.");return;}
+ document.getElementById("judulBacaanTampil").textContent=b.judul||"Bacaan untuk Siswa";
+ document.getElementById("bacaanTampil").textContent=b.isi||"";
+}
+function mulaiLatihan(kategori){
+ soalAktif=soal.filter(s=>!kategori||s.kategori===kategori);
+ gameMode=false;indeks=0;skor=0;
+ if(!soalAktif.length){
+  alert("Belum ada soal. Silakan buat soal di Bank Soal terlebih dahulu.");
+  buka("bank");return;
+ }
+ buka("kuis");tampilkanPertanyaan();
+}
+function mulaiGame(){
+ soalAktif=soal.slice().sort(()=>Math.random()-.5);
+ gameMode=true;indeks=0;skor=0;
+ if(!soalAktif.length){alert("Tambahkan soal terlebih dahulu di Bank Soal.");buka("bank");return;}
+ buka("game");tampilkanPertanyaan();
+}
+function tampilkanPertanyaan(){
+ if(indeks>=soalAktif.length){
+  const area=document.getElementById(gameMode?"areaGame":"areaKuis");
+  area.innerHTML=`<h3>Latihan selesai!</h3><p>Skor: ${skor} dari ${soalAktif.length*10}</p><button onclick="buka('bank')">Kembali ke Bank Soal</button>`;
+  return;
+ }
+ const s=soalAktif[indeks];
+ const area=document.getElementById(gameMode?"areaGame":"areaKuis");
+ const opsi=[s.opsiA,s.opsiB,s.opsiC,s.opsiD].filter(x=>x);
+ let html=`<p class="muted">Soal ${indeks+1} dari ${soalAktif.length}</p><div id="pertanyaanTampil">${aman(s.pertanyaan)}</div>`;
+ if(opsi.length){
+  html+='<div style="margin:15px 0">';
+  opsi.forEach((o,i)=>html+=`<label><input type="radio" name="jawabanKuis" value="${"ABCD"[i]}" style="width:auto;margin:8px"> ${"ABCD"[i]}. ${aman(o)}</label>`);
+  html+='</div>';
+ }else{
+  html+='<label>Jawaban siswa</label><textarea id="jawabanTerbuka" placeholder="Ketik jawaban atau tulis jawaban di papan interaktif..."></textarea>';
+  html+='<button class="orange" onclick="tampilkanDiPapanAktif()">✍️ Jawab di Papan</button>';
+ }
+ html+=`<div class="actions"><button class="green" onclick="periksaJawaban()">Periksa / Lanjut</button><button onclick="tampilkanDiPapan('${s.id}')">Tampilkan di Papan</button></div><div id="hasilJawaban"></div>`;
+ area.innerHTML=html;
+}
+function tampilkanDiPapanAktif(){
+ const s=soalAktif[indeks];if(s)tampilkanDiPapan(s.id);
+}
+function periksaJawaban(){
+ const s=soalAktif[indeks];
+ const pilihan=document.querySelector('input[name="jawabanKuis"]:checked');
+ const jawabanTerbuka=document.getElementById("jawabanTerbuka");
+ const jawaban=pilihan?pilihan.value:(jawabanTerbuka?jawabanTerbuka.value.trim():"");
+ const hasil=document.getElementById("hasilJawaban");
+ if(!jawaban){alert("Pilih atau tulis jawaban terlebih dahulu.");return;}
+ if(s.kunci){
+  const benar=jawaban.toLowerCase().trim()===s.kunci.toLowerCase().trim();
+  if(benar)skor+=10;
+  hasil.innerHTML=`<p>${benar?"✅ Jawaban benar!":"Jawaban dicatat untuk dibahas bersama."}</p><p>Kunci: ${aman(s.kunci)}</p><p>Skor sementara: ${skor}</p>`;
+ }else{
+  hasil.innerHTML="<p>Jawaban dicatat untuk diperiksa dan dibahas bersama guru.</p>";
+ }
+ const btn=hasil.parentElement.querySelector("button.green");
+ if(btn){btn.textContent="Soal Berikutnya";btn.onclick=()=>{indeks++;tampilkanPertanyaan();};}
+}
+function modePenghapus(){penghapus=true;}
+function modePena(){penghapus=false;}
+let canvas,ctx,menggambar=false,px=0,py=0;
+function aturPapan(){
+ canvas=document.getElementById("papan");if(!canvas)return;
+ const rect=canvas.getBoundingClientRect();
+ if(canvas.width!==Math.round(rect.width*devicePixelRatio)||canvas.height!==Math.round(rect.height*devicePixelRatio)){
+  const lama=document.createElement("canvas");
+  lama.width=canvas.width;lama.height=canvas.height;
+  if(lama.width&&lama.height)lama.getContext("2d").drawImage(canvas,0,0);
+  canvas.width=Math.round(rect.width*devicePixelRatio);
+  canvas.height=Math.round(rect.height*devicePixelRatio);
+  ctx=canvas.getContext("2d");
+  ctx.scale(devicePixelRatio,devicePixelRatio);
+  ctx.lineCap="round";ctx.lineJoin="round";
+  if(lama.width&&lama.height)ctx.drawImage(lama,0,0,lama.width/devicePixelRatio,lama.height/devicePixelRatio);
+ }else if(!ctx){ctx=canvas.getContext("2d");}
+ canvas.onpointerdown=e=>{
+  e.preventDefault();canvas.setPointerCapture(e.pointerId);
+  menggambar=true;const r=canvas.getBoundingClientRect();px=e.clientX-r.left;py=e.clientY-r.top;
+ };
+ canvas.onpointermove=e=>{
+  if(!menggambar)return;e.preventDefault();
+  const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+  ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(x,y);
+  ctx.strokeStyle=penghapus?"#ffffff":document.getElementById("warnaPena").value;
+  ctx.lineWidth=penghapus?24:Number(document.getElementById("ukuranPena").value);
+  ctx.stroke();px=x;py=y;
+ };
+ canvas.onpointerup=canvas.onpointercancel=()=>menggambar=false;
+}
+function hapusPapan(){
+ if(!confirm("Bersihkan seluruh tulisan pada papan?"))return;
+ if(ctx)ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+function simpanPapan(){
+ if(!canvas)return;
+ const a=document.createElement("a");a.download="jawaban-papan-gong-belajar.png";a.href=canvas.toDataURL("image/png");a.click();
+}
+function loginGuru(){
+ document.getElementById("pesanLogin").textContent="Login online belum diaktifkan. Supabase perlu dikonfigurasi terlebih dahulu. Fitur lokal tetap tersedia.";
+}
+function logoutGuru(){
+ guruLogin=false;
+ document.getElementById("pesanLogin").textContent="Anda menggunakan mode lokal browser.";
+}
+window.addEventListener("resize",()=>setTimeout(aturPapan,100));
+window.addEventListener("load",()=>{
+ perbaruiJumlah();tampilkanSoal();tampilkanBacaan();
+ setTimeout(aturPapan,100);
 });
-
-}
-
-
-function hapusSoal(index){
-
-if(confirm("Yakin ingin menghapus soal ini?")){
-
-soal.splice(index,1);
-
-localStorage.setItem("gongSoal",JSON.stringify(soal));
-tampilkanSoal();
-
-}
-
-}
-
-
-}
-
-function simpanJawabanKuis(){
-    let hasil = [];
-
-    soal.forEach(function(s, i){
-        let kotak = document.getElementById("jawabanSiswa" + i);
-
-        if(kotak){
-            hasil.push({
-                pertanyaan: s.pertanyaan,
-                jawaban: kotak.value
-            });
-        }
-    });
-
-    localStorage.setItem("jawabanKuisSiswa", JSON.stringify(hasil));
-    alert("Jawaban siswa berhasil disimpan pada perangkat ini.");
-}
-
-function tampilkanGame(){
-
-
-
-let area=document.getElementById("gameSoal");
-
-if(!area)return;
-
-if(soal.length==0){
-area.innerHTML="<p>Belum ada soal untuk Game.</p>";
-return;
-}
-
-area.innerHTML="";
-
-soal.forEach(function(s,i){
-
-area.innerHTML +=
-'<div class="soal">'+
-'<h3>🎮 Tantangan '+(i+1)+'</h3>'+
-'<p>'+s.pertanyaan+'</p>'+
-'<button onclick="alert(\'Jawaban diterima!\')">JAWAB</button>'+
-'</div>';
-
-});
-
-}
-
-
-function cekNumerasi(){
-
-let jawaban=document.getElementById("jawabanNumerasi").value;
-
-if(jawaban.trim()=="24"){
-document.getElementById("hasilNumerasi").innerHTML=
-"🎉 BENAR! Hebat!";
-}else{
-document.getElementById("hasilNumerasi").innerHTML=
-"❌ Belum benar. Coba lagi.";
-}
-
-}
-
-
-const canvas=document.getElementById("kanvas");
-const ctx=canvas.getContext("2d");
-
-let gambar=false;
-
-
-function aturCanvas(){
-
-canvas.width=canvas.clientWidth;
-canvas.height=400;
-
-ctx.lineWidth=5;
-ctx.lineCap="round";
-}
-
-
-function posisi(e){
-
-let r=canvas.getBoundingClientRect();
-
-if(e.touches){
-return {
-x:e.touches[0].clientX-r.left,
-y:e.touches[0].clientY-r.top
-};
-}
-
-return {
-x:e.clientX-r.left,
-y:e.clientY-r.top
-};
-
-}
-
-
-function mulai(e){
-
-e.preventDefault();
-
-gambar=true;
-
-let p=posisi(e);
-
-ctx.beginPath();
-ctx.moveTo(p.x,p.y);
-
-}
-
-
-function go(e){
-
-if(!gambar)return;
-
-e.preventDefault();
-
-let p=posisi(e);
-
-ctx.lineTo(p.x,p.y);
-ctx.stroke();
-
-}
-
-
-function selesai(){
-
-gambar=false;
-ctx.beginPath();
-
-}
-
-
-function bersihkan(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-}
-
-
-canvas.addEventListener("mousedown",mulai);
-canvas.addEventListener("mousemove",go);
-canvas.addEventListener("mouseup",selesai);
-canvas.addEventListener("mouseleave",selesai);
-
-canvas.addEventListener("touchstart",mulai);
-canvas.addEventListener("touchmove",go);
-canvas.addEventListener("touchend",selesai);
-
 </script>
-
 </body>
 </html>
