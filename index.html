@@ -400,33 +400,29 @@ tampilkanSoal();
 }
 
 
-function tampilkanKuis(){
-let area=document.getElementById("kuisSoal");
-
-if(!area)return;
-
-if(soal.length==0){
-area.innerHTML="<p>Belum ada soal. Silakan guru membuat soal di Bank Soal.</p>";
-return;
 }
 
-area.innerHTML="";
+function simpanJawabanKuis(){
+    let hasil = [];
 
-soal.forEach(function(s,i){
+    soal.forEach(function(s, i){
+        let kotak = document.getElementById("jawabanSiswa" + i);
 
-area.innerHTML +=
-'<div class="soal">'+
-'<h3>Soal '+(i+1)+'</h3>'+
-'<p>'+s.pertanyaan+'</p>'+
-'<textarea placeholder="Jawaban siswa..."></textarea>'+
-'</div>';
+        if(kotak){
+            hasil.push({
+                pertanyaan: s.pertanyaan,
+                jawaban: kotak.value
+            });
+        }
+    });
 
-});
-
+    localStorage.setItem("jawabanKuisSiswa", JSON.stringify(hasil));
+    alert("Jawaban siswa berhasil disimpan pada perangkat ini.");
 }
-
 
 function tampilkanGame(){
+
+
 
 let area=document.getElementById("gameSoal");
 
