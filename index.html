@@ -121,21 +121,23 @@ footer{text-align:center;padding:22px;color:#64748b;font-size:13px}
 <h2>📝 Bank Soal</h2>
 <input type="hidden" id="editId">
 <label>Kategori</label>
-<select id="kategori">
+<select id="kategori" onchange="document.getElementById('bagianPilihan').style.display=this.value==='Literasi'?'none':'block'">
 <option>Literasi</option>
 <option>Numerasi</option>
 </select>
 <label>Pertanyaan</label>
 <textarea id="pertanyaan" placeholder="Tuliskan pertanyaan..."></textarea>
-#bagianPilihan {
-  display: none;
-}
+
+<div id="bagianPilihan" style="display:none">
   <label>Pilihan A (opsional)</label>
   <input id="opsiA" placeholder="Pilihan A">
+
   <label>Pilihan B (opsional)</label>
   <input id="opsiB" placeholder="Pilihan B">
+
   <label>Pilihan C (opsional)</label>
   <input id="opsiC" placeholder="Pilihan C">
+
   <label>Pilihan D (opsional)</label>
   <input id="opsiD" placeholder="Pilihan D">
 </div>
