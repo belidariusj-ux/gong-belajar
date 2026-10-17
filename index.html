@@ -273,39 +273,46 @@ function kosongkanForm(){
  aturPilihanSoal();
 }
 function simpanSoal(){
- const pertanyaan=document.getElementById("pertanyaan").value.trim();
+ const pertanyaan = document.getElementById("pertanyaan").value.trim();
 
  if(!pertanyaan){
   alert("Silakan isi pertanyaan terlebih dahulu.");
   return;
  }
 
- const id=document.getElementById("editId").value;
- const kategori=document.getElementById("kategori").value;
+ const id = document.getElementById("editId").value;
+ const kategori = document.getElementById("kategori").value;
 
- const data={
-  id:id||String(Date.now()),
-  kategori:kategori,
-  pertanyaan:pertanyaan,
-  opsiA:kategori==="Literasi"?"":document.getElementById("opsiA").value.trim(),
-  opsiB:kategori==="Literasi"?"":document.getElementById("opsiB").value.trim(),
-  opsiC:kategori==="Literasi"?"":document.getElementById("opsiC").value.trim(),
-  opsiD:kategori==="Literasi"?"":document.getElementById("opsiD").value.trim(),
-  kunci:document.getElementById("kunci").value.trim()
+ const data = {
+  id: id || String(Date.now()),
+  kategori: kategori,
+  pertanyaan: pertanyaan,
+  opsiA: kategori === "Literasi" ? "" : document.getElementById("opsiA").value.trim(),
+  opsiB: kategori === "Literasi" ? "" : document.getElementById("opsiB").value.trim(),
+  opsiC: kategori === "Literasi" ? "" : document.getElementById("opsiC").value.trim(),
+  opsiD: kategori === "Literasi" ? "" : document.getElementById("opsiD").value.trim(),
+  kunci: document.getElementById("kunci").value.trim()
  };
 
  if(id){
-  const i=soal.findIndex(s=>String(s.id)===String(id));
-  if(i>=0)soal[i]=data;
+  const i = soal.findIndex(s => String(s.id) === String(id));
+  if(i >= 0) soal[i] = data;
   else soal.push(data);
  }else{
   soal.push(data);
  }
+
+ simpanSemua();
+ kosongkanForm();
+ tampilkanSoal();
+ alert("Soal tersimpan di browser ini. Penyimpanan online belum dihubungkan.");
+}
+
 function aturPilihanSoal(){
  const kategori = document.getElementById("kategori");
  const bagianPilihan = document.getElementById("bagianPilihan");
 
- if (!kategori || !bagianPilihan) return;
+ if(!kategori || !bagianPilihan) return;
 
  bagianPilihan.style.setProperty(
   "display",
@@ -316,13 +323,9 @@ function aturPilihanSoal(){
 
 const kategoriSoal = document.getElementById("kategori");
 
-if (kategoriSoal) {
+if(kategoriSoal){
  kategoriSoal.addEventListener("change", aturPilihanSoal);
  aturPilihanSoal();
-}
- simpanSemua();
- kosongkanForm();
- alert("Soal berhasil disimpan pada browser ini.");
 }
 function tampilkanSoal(){
  const area=document.getElementById("daftarSoal");
